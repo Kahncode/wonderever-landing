@@ -1,203 +1,212 @@
 ---
-import { Image } from 'astro:assets';
-import { images } from '../assets/images';
+import { Image } from "astro:assets";
+import { images } from "../assets/images";
 ---
 
 <section class="hero" aria-label="Hero">
-  <div class="hero-photo-wrap">
-    <Image
-      src={images.night.src}
-      alt={images.night.alt}
-      width={1920}
-      class="hero-photo"
-      loading="eager"
-    />
-    <div class="hero-overlay"></div>
-  </div>
+	<div class="hero-photo-wrap">
+		<Image src={images.night.src} alt={images.night.alt} width={1920} class="hero-photo" loading="eager" />
+		<div class="hero-overlay"></div>
+	</div>
 
-  <div class="hero-content">
-    <p class="hero-since">since 2013</p>
-    <h1 class="wordmark">WONDEREVER</h1>
-    <p class="hero-tagline">the best kept secret on the playa</p>
-    <p class="hero-meta">
-      <span>barrio</span>
-      <span class="dot">·</span>
-      <span>Elsewhere</span>
-      <span class="dot">·</span>
-      <span>Monegros Desert</span>
-      <span class="dot">·</span>
-      <span>July 2026</span>
-    </p>
-    <a
-      href="https://docs.google.com/forms/d/e/1FAIpQLSf47eikyRyJv_UiQxbgP4WL_ujqcO7Git-9PqrA-ziu2_j6Lw/viewform"
-      class="hero-cta"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      Become a Wonderling
-    </a>
-    <a href="#emerge" class="hero-scroll" aria-label="Scroll to learn more">↓</a>
-  </div>
+	<div class="hero-content">
+		<p class="hero-since">Since 2013</p>
+		<h1 class="wordmark">WONDEREVER</h1>
+		<p class="hero-tagline">The best kept secret on the playa</p>
+		<p class="hero-meta">
+			<span>Elsewhere 2026 · July 7–12</span>
+		</p>
+		<a
+			href="https://docs.google.com/forms/d/e/1FAIpQLSf47eikyRyJv_UiQxbgP4WL_ujqcO7Git-9PqrA-ziu2_j6Lw/viewform"
+			class="hero-cta"
+			target="_blank"
+			rel="noopener noreferrer"
+		>
+			Become a Wonderling
+		</a>
+		<a href="#emerge" class="hero-scroll" aria-label="Scroll to learn more">↓</a>
+	</div>
 </section>
 
 <style>
-  @keyframes flicker {
-    0%, 88%, 100% { opacity: 1; }
-    89%           { opacity: 0.86; }
-    91%           { opacity: 0.94; }
-    93%           { opacity: 0.78; }
-    95%           { opacity: 0.96; }
-  }
+	@keyframes flicker {
+		0%,
+		88%,
+		100% {
+			opacity: 1;
+		}
+		89% {
+			opacity: 0.86;
+		}
+		91% {
+			opacity: 0.94;
+		}
+		93% {
+			opacity: 0.78;
+		}
+		95% {
+			opacity: 0.96;
+		}
+	}
 
-  @keyframes bob {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(9px); }
-  }
+	@keyframes bob {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(9px);
+		}
+	}
 
-  .hero {
-    position: relative;
-    min-height: 100svh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    background: oklch(0.08 0.015 10);
-  }
+	.hero {
+		position: relative;
+		min-height: 100svh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+		background: oklch(0.08 0.015 10);
+	}
 
-  .hero-photo-wrap {
-    position: absolute;
-    inset: 0;
-  }
+	.hero-photo-wrap {
+		position: absolute;
+		inset: 0;
+	}
 
-  .hero-photo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center center;
-  }
+	.hero-photo {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center center;
+	}
 
-  .hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to bottom,
-      oklch(0.08 0.015 10 / 0.92) 0%,
-      oklch(0.08 0.015 10 / 0.60) 30%,
-      oklch(0.08 0.015 10 / 0.30) 55%,
-      oklch(0.08 0.015 10 / 0.55) 78%,
-      oklch(0.08 0.015 10)       100%
-    );
-  }
+	.hero-overlay {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			to bottom,
+			oklch(0.08 0.015 10 / 0.15) 0%,
+			oklch(0.08 0.015 10 / 0.25) 30%,
+			oklch(0.08 0.015 10 / 0.45) 55%,
+			oklch(0.08 0.015 10 / 0.72) 80%,
+			oklch(0.08 0.015 10) 100%
+		);
+	}
 
-  .hero-content {
-    position: relative;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: clamp(0.75rem, 2vw, 1.25rem);
-    padding: clamp(2rem, 6vw, 4rem) clamp(1.5rem, 6vw, 3rem);
-    padding-bottom: clamp(4rem, 10vw, 6rem);
-  }
+	.hero-content {
+		position: relative;
+		z-index: 10;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		gap: clamp(0.75rem, 2vw, 1.25rem);
+		padding: clamp(2rem, 6vw, 4rem) clamp(1.5rem, 6vw, 3rem);
+		padding-bottom: clamp(4rem, 10vw, 6rem);
+	}
 
-  .hero-since {
-    font-family: 'Jost', sans-serif;
-    font-weight: 300;
-    font-size: 0.75rem;
-    letter-spacing: 0.45em;
-    text-transform: uppercase;
-    color: oklch(0.55 0.01 80);
-    margin: 0;
-  }
+	.hero-since {
+		font-family: "Jost", sans-serif;
+		font-weight: 300;
+		font-size: clamp(0.95rem, 2.2vw, 1.4rem);
+		color: oklch(0.88 0.008 80);
+		margin: 0;
+		letter-spacing: 0.04em;
+		line-height: 1.6;
+		text-shadow: 0 1px 10px oklch(0.06 0.01 10 / 0.9);
+	}
 
-  .wordmark {
-    font-family: 'Monoton', cursive;
-    font-size: clamp(2rem, 9.5vw, 9rem);
-    font-weight: 400;
-    color: oklch(0.97 0.01 10);
-    text-shadow:
-      0 0 8px white,
-      0 0 28px oklch(0.58 0.22 15),
-      0 0 60px oklch(0.58 0.22 15 / 0.85),
-      0 0 110px oklch(0.58 0.22 15 / 0.55),
-      0 0 190px oklch(0.58 0.22 15 / 0.30);
-    animation: flicker 16s infinite;
-    line-height: 1.05;
-    margin: 0;
-    letter-spacing: 0.04em;
-  }
+	.wordmark {
+		font-family: "Monoton", cursive;
+		font-size: clamp(2rem, 9.5vw, 9rem);
+		font-weight: 400;
+		color: oklch(0.97 0.01 10);
+		text-shadow:
+			0 0 8px white,
+			0 0 28px oklch(0.62 0.26 322),
+			0 0 60px oklch(0.62 0.26 322 / 0.85),
+			0 0 110px oklch(0.62 0.26 322 / 0.55),
+			0 0 190px oklch(0.62 0.26 322 / 0.3);
+		animation: flicker 16s infinite;
+		line-height: 1.05;
+		margin: 0;
+		letter-spacing: 0.04em;
+	}
 
-  .hero-tagline {
-    font-family: 'Jost', sans-serif;
-    font-weight: 300;
-    font-size: clamp(0.95rem, 2.2vw, 1.4rem);
-    color: oklch(0.82 0.008 80);
-    margin: 0;
-    letter-spacing: 0.04em;
-    line-height: 1.6;
-  }
+	.hero-tagline {
+		font-family: "Jost", sans-serif;
+		font-weight: 300;
+		font-size: clamp(0.95rem, 2.2vw, 1.4rem);
+		color: oklch(0.88 0.008 80);
+		margin: 0;
+		letter-spacing: 0.04em;
+		line-height: 1.6;
+		text-shadow: 0 1px 10px oklch(0.06 0.01 10 / 0.9);
+	}
 
-  .hero-meta {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    justify-content: center;
-    font-family: 'Jost', sans-serif;
-    font-weight: 300;
-    font-size: 0.72rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: oklch(0.48 0.01 80);
-    margin: 0;
-  }
+	.hero-meta {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+		justify-content: center;
+		font-family: "Jost", sans-serif;
+		font-weight: 300;
+		font-size: 0.72rem;
+		letter-spacing: 0.25em;
+		text-transform: uppercase;
+		color: oklch(0.7 0.01 80);
+		margin: 0;
+		text-shadow: 0 1px 8px oklch(0.06 0.01 10 / 0.9);
+	}
 
-  .dot {
-    color: oklch(0.58 0.22 15);
-    text-shadow: 0 0 12px oklch(0.58 0.22 15 / 0.7);
-  }
+	.dot {
+		color: oklch(0.62 0.26 322);
+		text-shadow: 0 0 12px oklch(0.62 0.26 322 / 0.7);
+	}
 
-  .hero-cta {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: oklch(0.58 0.22 15);
-    color: oklch(0.97 0.008 80);
-    font-family: 'Bungee', sans-serif;
-    font-size: clamp(0.85rem, 1.8vw, 1.05rem);
-    letter-spacing: 0.04em;
-    text-decoration: none;
-    padding: 1rem 2.5rem;
-    min-height: 52px;
-    box-shadow:
-      0 0 20px oklch(0.58 0.22 15 / 0.5),
-      0 0 50px oklch(0.58 0.22 15 / 0.25);
-    transition: background 0.18s cubic-bezier(0.25, 1, 0.5, 1),
-                box-shadow 0.18s cubic-bezier(0.25, 1, 0.5, 1);
-    margin-top: clamp(0.5rem, 2vw, 1rem);
-  }
+	.hero-cta {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		background: oklch(0.62 0.26 322);
+		color: oklch(0.97 0.008 80);
+		font-family: "Bungee", sans-serif;
+		font-size: clamp(0.85rem, 1.8vw, 1.05rem);
+		letter-spacing: 0.04em;
+		text-decoration: none;
+		padding: 1rem 2.5rem;
+		min-height: 52px;
+		box-shadow:
+			0 0 20px oklch(0.62 0.26 322 / 0.5),
+			0 0 50px oklch(0.62 0.26 322 / 0.25);
+		transition:
+			background 0.18s cubic-bezier(0.25, 1, 0.5, 1),
+			box-shadow 0.18s cubic-bezier(0.25, 1, 0.5, 1);
+		margin-top: clamp(0.5rem, 2vw, 1rem);
+	}
 
-  .hero-cta:hover {
-    background: oklch(0.66 0.20 15);
-    box-shadow:
-      0 0 30px oklch(0.58 0.22 15 / 0.65),
-      0 0 80px oklch(0.58 0.22 15 / 0.35);
-  }
+	.hero-cta:hover {
+		background: oklch(0.68 0.24 322);
+		box-shadow:
+			0 0 30px oklch(0.62 0.26 322 / 0.65),
+			0 0 80px oklch(0.62 0.26 322 / 0.35);
+	}
 
-  .hero-scroll {
-    margin-top: clamp(1.5rem, 4vw, 2.5rem);
-    display: inline-block;
-    color: oklch(0.45 0.01 80);
-    font-family: 'Jost', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 300;
-    text-decoration: none;
-    animation: bob 3.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
-    line-height: 1;
-  }
+	.hero-scroll {
+		margin-top: clamp(1.5rem, 4vw, 2.5rem);
+		display: inline-block;
+		color: oklch(0.45 0.01 80);
+		font-family: "Jost", sans-serif;
+		font-size: 1.2rem;
+		font-weight: 300;
+		text-decoration: none;
+		animation: bob 3.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+		line-height: 1;
+	}
 
-  .hero-scroll:hover {
-    color: oklch(0.65 0.01 80);
-  }
+	.hero-scroll:hover {
+		color: oklch(0.65 0.01 80);
+	}
 </style>

@@ -111,8 +111,8 @@ Elsewhere is a social experiment emphasizing collective creation rather than con
 
 ### Size & Community
 
-- Target size: ~35–40 co-creators
-- Current (2026 profile): 40 members
+- Target size: ~30–35 co-creators
+- Current (2026 profile): 35 members
 - Languages: English
 - Accepting new members: Yes (applications under review, responses expected early May 2026)
 - Children allowed: No
@@ -189,3 +189,45 @@ Elsewhere is a social experiment emphasizing collective creation rather than con
 - The event emphasizes radical self-reliance but barrios like Wonderever provide communal infrastructure (shade, water, food, showers) that eases that burden for their members
 - Wonderever has been a constant presence since the early days of Nowhere (2013)
 - The "wonderlings" term is Wonderever-specific; the event-wide term for attendees is "nobodies"
+
+---
+
+## Verbatim Source Text (Written by Barrio Members)
+
+### From wonderever.space (main site)
+
+> Wonderever is world of wonderful wanderers that work hard, play hard and take care of each other in the heat. Since 2013 we've combined a chill atmosphere with a touch of craziness, hammocks and relaxing. We continue to add paradoxes, surrealism, provide hammocks, pillows and couches and give one of the best views on the surrounding landscape from our rooftop terrace. We organise workshops and talks/lectures about anything that is slightly related to the wonders in this world. Word is out that we are one of the best kept secrets of the playa.
+>
+> We are open for 2026. We are currently reviewing applications and will get back to you by early May.
+>
+> FYI, this website will not be updated very often!
+
+### From wonderever.space/manifesto
+
+> We aim at being a chill barrio, of around 35 and more co-creators.
+>
+> Our organization will be no-stress and relax-y, yet efficient.
+>
+> We will provide Nowhere with a chill living-room, to gather and wonder.
+>
+> This year, we'll bring our famous hammocks back, for tired (or not-so-tired) no-oners to lay down a bit before going back on their adventures.
+>
+> They will also be some silliness in the air, a touch of acid humor, and we'll be ready to spice the days (and nights)...
+>
+> We'll have a vegetarian kitchen (sometimes bacon could be seen in there, but that's a well guarded guilty pleasure).
+>
+> As co-creators, we expect ourselves to be committed to participate: either doing build and strike, taking necessary lead shifts in the barrio during the event, bringing an art piece to the playa or to the barrio, keep the barrio clean, its your house, get involved in the organization of the barrio before the event, in our online meetings, helping Norg with volunteer shifts.
+>
+> We aim to stay a small, human-size camp for all of us to connect with each other and keep organization to an easy level, but we also love to have new energy and discover new people! While people who were in the barrio past years will probably be the majority of the co-creators, we'd be very happy to welcome newcomers for the spots we have left.
+>
+> If you like what you read, want to get involved in the organization of the barrio, and (most importantly) think we'll get very well along, write us an email (wondereverbarrio@gmail.com) :)
+
+### From humans.nobodies.team/Barrios/wonderever (event platform profile)
+
+> Wonderever is the best kept secret on the playa. Since 2013 we've harboured a web of wonderful wanderers that work hard, play hard and take care of each other in the heat!
+>
+> Our camp is a vibrant haven nestled at the top of the plaza. We're a diverse community that values connection, co-creation, hammocks, and the art of relaxing. We provide a living room where hammocks sway gently in the (shady) breeze, breathtaking balcony views, and a touch of silliness in our ceremonial chapel. Wonderever – totally not a cult.
+>
+> We supply the usual: water, showers, shade for tents, food and drinks. On top of that we have several chill spaces, hammocks and lounge nets.
+>
+> Join us for a unique blend of relaxation, warmth, and community. We're a queer friendly camp and value diversity. Anyone and everyone is welcome here!

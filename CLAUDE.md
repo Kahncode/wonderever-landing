@@ -91,8 +91,8 @@ import { images } from "../assets/images";
 
 - **Font**: Outfit (Google Fonts, weights 400/700) — per `docs/shared/brand.md`
 - **Color Palette**: Use semantic tokens from `docs/shared/brand.md` color tables
-  - Light theme: `#FFFFFF` background, `#000000` text, `#FF2358` accent
-  - Dark theme: `#141414` background, `#FFFFFF` text, `#FF2358` accent (same accent)
+  - Light theme: `#FFFFFF` background, `#000000` text, `oklch(0.62 0.26 322)` accent
+  - Dark theme: `#141414` background, `#FFFFFF` text, `oklch(0.62 0.26 322)` accent (same accent)
 - Apply brand.md tokens directly—no neutrals or placeholders
 
 ---
@@ -205,7 +205,7 @@ Prospective Wonderlings and curious Nobodies at Elsewhere. One job: feel the vib
 
 ### Aesthetic Direction
 - **Theme**: Dark — deep desert night. Warm near-black backgrounds (`oklch(0.10 0.02 55)`).
-- **Accent**: `#FF2358` hot pink-red (the neon heart). Secondary: dusty acid-green, burnt amber.
+- **Accent**: `oklch(0.62 0.26 322)` vivid purple (the neon heart). Secondary: dusty acid-green, burnt amber.
 - **Typography**: `Monoton` (logo/wordmark, neon tube feel) · `Bungee` (headings) · `Jost` (body)
 - **Effects**: `text-shadow` neon glow, CSS neon flicker on wordmark, grain/noise texture overlay, full-bleed atmospheric photography, asymmetric layouts, extreme scale contrast between display and body type.
 - **Never**: gradient text, left-border accent stripes, card grids, glassmorphism soup, anything that looks like a startup landing page.
