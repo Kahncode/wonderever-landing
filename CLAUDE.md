@@ -1,6 +1,6 @@
 # wonderever-landing — CLAUDE.md
 
-Astro static landing page for Wonderever Barrio.
+Astro static landing page for **Wonderever** — a barrio (self-organized camp) at **Elsewhere**, a Burning Man–style regional event in the Monegros Desert, Spain (July, formerly called Nowhere). Members of Wonderever are called *Wonderlings*. Full context: [`wonderever.md`](./wonderever.md).
 
 ## Commands
 

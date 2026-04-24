@@ -1,32 +1,13 @@
-# Astro Starter Kit: Basics
+# Wonderever Landing Page
 
-```sh
-npm create astro@latest -- --template basics
-```
+Landing page for **Wonderever**, a barrio (self-organized camp) at **Elsewhere** — a Burning Man–style regional event held every July in the Monegros Desert, Spain (formerly called Nowhere). Wonderever has been active since 2013; its members are called *Wonderlings*.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+- **Event:** Elsewhere / Nobodies Collective — https://nobodies.team/
+- **Barrio:** Wonderever — https://www.wonderever.space/
+- **Barrio profile:** https://humans.nobodies.team/Barrios/wonderever
+- **Context dump:** [`wonderever.md`](./wonderever.md)
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+---
 
 ## 🧞 Commands
 
@@ -44,7 +25,6 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
 ## Stack
 
 - **Astro 6** — static output, file-based routing, Islands Architecture
@@ -55,3 +35,5 @@ Feel free to check [our documentation](https://docs.astro.build) or jump into ou
 ## Deploy
 
 Push to `main` → Cloudflare Pages builds automatically with `npm run build` and serves `./dist/`.
+
+> See `CLAUDE.md` for architecture decisions, code style, and contributor rules.
