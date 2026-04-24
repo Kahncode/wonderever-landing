@@ -1,0 +1,95 @@
+---
+import { Image } from 'astro:assets';
+import { images } from '../assets/images';
+---
+
+<section class="emerge" id="emerge" aria-label="About the barrio">
+  <div class="emerge-layout">
+    <figure class="emerge-figure">
+      <Image
+        src={images.night2.src}
+        alt={images.night2.alt}
+        width={1200}
+        class="emerge-photo"
+      />
+    </figure>
+
+    <div class="emerge-text">
+      <h2 class="emerge-heading">A chill-room<br />in the desert</h2>
+      <p>
+        Since 2013, we've harboured a web of wonderful wanderers that work
+        hard, play hard, and take care of each other in the heat.
+      </p>
+      <p>
+        Wonderever is a hand-built barrio at Elsewhere — a temporary city that
+        blooms every July in the Monegros desert and vanishes without a trace.
+      </p>
+      <p class="emerge-kicker">We bring the shade.<br />You bring yourself.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .emerge {
+    background: oklch(0.09 0.015 10);
+    padding: clamp(4rem, 8vw, 8rem) clamp(1.5rem, 6vw, 5rem);
+  }
+
+  .emerge-layout {
+    max-width: 1360px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  @media (min-width: 860px) {
+    .emerge-layout {
+      grid-template-columns: 3fr 2fr;
+      align-items: end;
+    }
+  }
+
+  .emerge-figure {
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .emerge-photo {
+    width: 100%;
+    height: clamp(320px, 60vh, 680px);
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+  }
+
+  .emerge-text {
+    max-width: 44ch;
+  }
+
+  .emerge-heading {
+    font-family: 'Bungee', sans-serif;
+    font-size: clamp(2rem, 5vw, 4rem);
+    color: oklch(0.96 0.008 80);
+    line-height: 1.05;
+    margin: 0 0 clamp(1.25rem, 3vw, 2rem);
+    letter-spacing: -0.01em;
+  }
+
+  .emerge-text p {
+    font-family: 'Jost', sans-serif;
+    font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+    line-height: 1.8;
+    color: oklch(0.72 0.01 80);
+    margin: 0 0 1rem;
+    max-width: 44ch;
+  }
+
+  .emerge-kicker {
+    font-family: 'Bungee', sans-serif;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: oklch(0.76 0.13 82) !important;
+    line-height: 1.4;
+    margin-top: clamp(1.5rem, 3vw, 2.5rem) !important;
+  }
+</style>

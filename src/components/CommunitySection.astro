@@ -1,0 +1,111 @@
+---
+import { Image } from 'astro:assets';
+import { images } from '../assets/images';
+---
+
+<section class="community" aria-label="The Wonderlings">
+  <figure class="community-photo-wrap">
+    <Image
+      src={images.people.src}
+      alt={images.people.alt}
+      width={1400}
+      class="community-photo"
+    />
+    <div class="community-photo-overlay"></div>
+  </figure>
+
+  <div class="community-text">
+    <h2 class="community-heading">40 wonderful<br />wanderers</h2>
+    <p>
+      We're co-creators, not spectators. Wonderlings build and strike the camp,
+      cook together, run shifts, make art, and hold each other up in the dust.
+    </p>
+    <p class="community-punch">In return: home.</p>
+
+    <div class="community-tags">
+      <span>open to all</span>
+      <span>LGBTQ+ friendly</span>
+      <span>totally not a cult</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .community {
+    background: oklch(0.13 0.022 40);
+  }
+
+  .community-photo-wrap {
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .community-photo {
+    width: 100%;
+    height: clamp(340px, 58vh, 680px);
+    object-fit: cover;
+    object-position: center 30%;
+    display: block;
+  }
+
+  .community-photo-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 50%,
+      oklch(0.13 0.022 40 / 0.80) 100%
+    );
+  }
+
+  .community-text {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: clamp(3rem, 6vw, 6rem) clamp(1.5rem, 6vw, 5rem);
+  }
+
+  .community-heading {
+    font-family: 'Bungee', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    color: oklch(0.96 0.008 80);
+    line-height: 1.0;
+    margin: 0 0 clamp(1.25rem, 3vw, 2rem);
+    letter-spacing: -0.01em;
+    max-width: 14ch;
+  }
+
+  .community-text p {
+    font-family: 'Jost', sans-serif;
+    font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+    line-height: 1.8;
+    color: oklch(0.72 0.012 80);
+    margin: 0 0 1rem;
+    max-width: 52ch;
+  }
+
+  .community-punch {
+    font-family: 'Bungee', sans-serif;
+    font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+    color: oklch(0.76 0.13 82) !important;
+    margin-top: clamp(1rem, 2vw, 1.5rem) !important;
+    margin-bottom: clamp(1.5rem, 3vw, 2.5rem) !important;
+  }
+
+  .community-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+  }
+
+  .community-tags span {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: oklch(0.60 0.012 80);
+    padding: 0.35rem 0.75rem;
+    border: 1px solid oklch(0.30 0.015 10);
+  }
+</style>

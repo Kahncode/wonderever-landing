@@ -5,6 +5,8 @@ Landing page for **Wonderever**, a barrio (self-organized camp) at **Elsewhere**
 - **Event:** Elsewhere / Nobodies Collective — https://nobodies.team/
 - **Barrio:** Wonderever — https://www.wonderever.space/
 - **Barrio profile:** https://humans.nobodies.team/Barrios/wonderever
+- **Barrio contact email:**: wondereverbarrio@gmail.com
+- **Barrio application form (2026):** https://docs.google.com/forms/d/e/1FAIpQLSf47eikyRyJv_UiQxbgP4WL_ujqcO7Git-9PqrA-ziu2_j6Lw/viewform
 - **Context dump:** [`wonderever.md`](./wonderever.md)
 
 ---

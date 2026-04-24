@@ -12,6 +12,9 @@ export default defineConfig({
 
 	vite: {
 		plugins: [tailwindcss()],
+		server: {
+			allowedHosts: true,
+		},
 	},
 
 	// Cloudflare adapter removed: this is a static landing page with no dynamic features

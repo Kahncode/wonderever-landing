@@ -1,11 +1,19 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import HeroSection from '../components/HeroSection.astro';
+import EmergeSection from '../components/EmergeSection.astro';
+import InsideSection from '../components/InsideSection.astro';
+import CommunitySection from '../components/CommunitySection.astro';
+import ApplySection from '../components/ApplySection.astro';
 ---
 
-<Layout>
-	<Welcome />
+<Layout
+  title="Wonderever — a barrio at Elsewhere"
+  description="The best kept secret on the playa. Wonderever is a barrio at Elsewhere, the Monegros Desert, Spain, every July. Since 2013. Now accepting Wonderlings for 2026."
+>
+  <HeroSection />
+  <EmergeSection />
+  <InsideSection />
+  <CommunitySection />
+  <ApplySection />
 </Layout>

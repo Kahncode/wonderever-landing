@@ -1,0 +1,158 @@
+---
+import { Image } from 'astro:assets';
+import { images } from '../assets/images';
+---
+
+<section class="inside" aria-label="Inside the barrio">
+  <div class="inside-wide-wrap">
+    <Image
+      src={images.y2024.src}
+      alt={images.y2024.alt}
+      width={1600}
+      class="inside-wide-photo"
+    />
+    <div class="inside-wide-overlay"></div>
+    <h2 class="inside-wide-heading">
+      hammocks,<br />heat,<br />&amp; a bit of<br />chaos
+    </h2>
+  </div>
+
+  <div class="inside-lower">
+    <figure class="inside-portrait-wrap">
+      <Image
+        src={images.nets.src}
+        alt={images.nets.alt}
+        width={700}
+        class="inside-portrait"
+      />
+    </figure>
+
+    <div class="inside-offerings">
+      <p>
+        The living room is always open. Find a net, drop your bag, meet someone
+        strange and wonderful. Wonderlings work hard on build and strike — and
+        in between, this is home.
+      </p>
+      <ul class="offerings">
+        <li>hammocks &amp; lounge nets</li>
+        <li>panoramic rooftop terrace</li>
+        <li>vegetarian kitchen (mostly)</li>
+        <li>workshops on the wonders of the world</li>
+        <li>a whimsical ceremonial chapel</li>
+        <li>queer-friendly &nbsp;·&nbsp; sober spaces available</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .inside {
+    background: oklch(0.10 0.018 15);
+  }
+
+  /* ── Wide photo with heading overlay ── */
+
+  .inside-wide-wrap {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .inside-wide-photo {
+    width: 100%;
+    height: clamp(380px, 65vh, 740px);
+    object-fit: cover;
+    object-position: center 40%;
+    display: block;
+  }
+
+  .inside-wide-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      oklch(0.10 0.018 15 / 0.15) 0%,
+      oklch(0.10 0.018 15 / 0.70) 65%,
+      oklch(0.10 0.018 15)        100%
+    );
+  }
+
+  .inside-wide-heading {
+    position: absolute;
+    bottom: clamp(1.5rem, 4vw, 3rem);
+    left: clamp(1.5rem, 6vw, 5rem);
+    font-family: 'Bungee', sans-serif;
+    font-size: clamp(2.5rem, 8vw, 7rem);
+    color: oklch(0.97 0.008 80);
+    line-height: 0.96;
+    margin: 0;
+    z-index: 10;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── Lower: portrait + offerings ── */
+
+  .inside-lower {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: clamp(3rem, 6vw, 6rem) clamp(1.5rem, 6vw, 5rem);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(2.5rem, 5vw, 5rem);
+  }
+
+  @media (min-width: 860px) {
+    .inside-lower {
+      grid-template-columns: 2fr 3fr;
+      align-items: start;
+    }
+  }
+
+  .inside-portrait-wrap {
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .inside-portrait {
+    width: 100%;
+    height: clamp(280px, 55vw, 580px);
+    max-height: 580px;
+    object-fit: cover;
+    object-position: center 30%;
+    display: block;
+  }
+
+  .inside-offerings p {
+    font-family: 'Jost', sans-serif;
+    font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+    line-height: 1.8;
+    color: oklch(0.72 0.01 80);
+    margin: 0 0 2rem;
+    max-width: 50ch;
+  }
+
+  .offerings {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .offerings li {
+    font-family: 'Jost', sans-serif;
+    font-size: clamp(0.875rem, 1.4vw, 1rem);
+    line-height: 1.5;
+    color: oklch(0.78 0.012 80);
+    padding-left: 1.5rem;
+    position: relative;
+  }
+
+  .offerings li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: oklch(0.58 0.22 15);
+    font-weight: 300;
+  }
+</style>
