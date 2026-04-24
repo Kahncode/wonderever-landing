@@ -22,3 +22,22 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Local work temporary folder
+.temp/
+
+# Claude Code
+.claude/settings.local.json
+CLAUDE.local.md
+
+# Playwright
+tests/screenshots/
+playwright-report/
+test-results/
+.auth/
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example

@@ -1,17 +1,36 @@
 {
-  "name": "",
-  "type": "module",
-  "version": "0.0.1",
-  "engines": {
-    "node": ">=22.12.0"
-  },
-  "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
-  "dependencies": {
-    "astro": "^6.1.9"
-  }
+	"name": "wonderever-landing",
+	"type": "module",
+	"version": "0.0.1",
+	"engines": {
+		"node": ">=22.12.0"
+	},
+	"scripts": {
+		"dev": "astro dev",
+		"build": "astro build",
+		"preview": "npm run build && wrangler dev",
+		"astro": "astro",
+		"test": "playwright test",
+		"test:ui": "playwright test --ui",
+		"test:debug": "playwright test --debug",
+		"generate-types": "wrangler types",
+		"deploy": "npm run build && wrangler deploy"
+	},
+	"dependencies": {
+		"@astrojs/cloudflare": "^13.2.0",
+		"@astrojs/react": "^5.0.4",
+		"@fillout/react": "^3.1.2",
+		"@tailwindcss/vite": "^4.2.2",
+		"astro": "^6.1.8",
+		"react": "^19.2.5",
+		"react-dom": "^19.2.5",
+		"tailwindcss": "^4.2.2"
+	},
+	"devDependencies": {
+		"@playwright/test": "^1.59.1",
+		"wrangler": "^4.84.1"
+	},
+	"overrides": {
+		"vite": "^7"
+	}
 }
