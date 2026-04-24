@@ -190,3 +190,29 @@ Before assuming something is broken:
 - Don't auto-commit or auto-deploy
 - Don't install new dependencies without discussing the tradeoff
 - Don't add unnecessary dependencies — React is reserved for interactive islands only
+
+---
+
+## Design Context
+
+> Full detail in `.impeccable.md`. This is the condensed version for quick reference.
+
+### Users
+Prospective Wonderlings and curious Nobodies at Elsewhere. One job: feel the vibe, decide they belong, apply. Single CTA: the application form. Secondary: contact email (`wondereverbarrio@gmail.com`).
+
+### Brand Personality
+**Neon · Grungy · Wonderstruck** — warm, self-aware, irreverent. "Totally not a cult." A hand-painted neon sign in a desert barrio that's been around long enough to feel like a legend.
+
+### Aesthetic Direction
+- **Theme**: Dark — deep desert night. Warm near-black backgrounds (`oklch(0.10 0.02 55)`).
+- **Accent**: `#FF2358` hot pink-red (the neon heart). Secondary: dusty acid-green, burnt amber.
+- **Typography**: `Monoton` (logo/wordmark, neon tube feel) · `Bungee` (headings) · `Jost` (body)
+- **Effects**: `text-shadow` neon glow, CSS neon flicker on wordmark, grain/noise texture overlay, full-bleed atmospheric photography, asymmetric layouts, extreme scale contrast between display and body type.
+- **Never**: gradient text, left-border accent stripes, card grids, glassmorphism soup, anything that looks like a startup landing page.
+
+### Design Principles
+1. Feel before function — first 3 seconds must create an emotional response (heat, dust, neon).
+2. One CTA, unmissable — the apply button glows.
+3. Texture over polish — grain, grit, intentional imperfection.
+4. Scale as hierarchy — extreme type size contrast instead of boxes and cards.
+5. Authentic weirdness — early-web personality, not retro nostalgia.
