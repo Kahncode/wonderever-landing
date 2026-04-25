@@ -1,95 +1,107 @@
 ---
-import { Image } from 'astro:assets';
-import { images } from '../assets/images';
+import { Image } from "astro:assets";
+import { images } from "../assets/images";
 ---
 
 <section class="emerge" id="emerge" aria-label="About the barrio">
-  <div class="emerge-layout">
-    <figure class="emerge-figure">
-      <Image
-        src={images.night2.src}
-        alt={images.night2.alt}
-        width={1200}
-        class="emerge-photo"
-      />
-    </figure>
+	<div class="emerge-layout">
+		<figure class="emerge-figure">
+			<Image src={images.night2.src} alt={images.night2.alt} width={1200} class="emerge-photo" />
+		</figure>
 
-    <div class="emerge-text">
-      <h2 class="emerge-heading">A chill-room<br />in the desert</h2>
-      <p>
-        Since 2013, we've harboured a web of wonderful wanderers that work
-        hard, play hard, and take care of each other in the heat.
-      </p>
-      <p>
-        Wonderever is a hand-built barrio at Elsewhere. A temporary city that
-        blooms every July in the desert and vanishes without a trace.
-      </p>
-      <p class="emerge-kicker">We bring the shade.<br />You bring yourself.</p>
-    </div>
-  </div>
+		<div class="emerge-text">
+			<h2 class="emerge-heading">A chill-room<br />in the desert</h2>
+			<p>
+				Since 2013, we've harboured a web of wonderful wanderers that work hard, play hard, and take care of each other
+				in the heat.
+			</p>
+			<p>
+				We combine a chill atmosphere with a touch of nerdy craziness. Hammocks, paradoxes, surrealism, fuckery, and one
+				of the best views on the playa.
+			</p>
+			<p class="emerge-kicker">Come to gather.<br />Stay to wonder.</p>
+		</div>
+	</div>
 </section>
 
 <style>
-  .emerge {
-    background: oklch(0.09 0.015 10);
-    padding: clamp(4rem, 8vw, 8rem) clamp(1.5rem, 6vw, 5rem);
-  }
+	.emerge {
+		background: oklch(0.09 0.015 10);
+		padding: clamp(4rem, 8vw, 8rem) clamp(1.5rem, 6vw, 5rem);
+	}
 
-  .emerge-layout {
-    max-width: 1360px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: clamp(2.5rem, 5vw, 4rem);
-  }
+	.emerge-layout {
+		max-width: 1360px;
+		margin: 0 auto;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: clamp(2.5rem, 5vw, 4rem);
+	}
 
-  @media (min-width: 860px) {
-    .emerge-layout {
-      grid-template-columns: 3fr 2fr;
-      align-items: end;
-    }
-  }
+	@media (min-width: 860px) {
+		.emerge-layout {
+			grid-template-columns: 3fr 2fr;
+			align-items: end;
+		}
+	}
 
-  .emerge-figure {
-    margin: 0;
-    overflow: hidden;
-  }
+	.emerge-figure {
+		margin: 0;
+		overflow: hidden;
+		position: relative;
+	}
 
-  .emerge-photo {
-    width: 100%;
-    height: clamp(320px, 60vh, 680px);
-    object-fit: cover;
-    object-position: center center;
-    display: block;
-  }
+	.emerge-figure::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		background:
+			linear-gradient(to right, oklch(0.09 0.015 10) 0%, transparent 18%),
+			linear-gradient(to left, oklch(0.09 0.015 10) 0%, transparent 18%),
+			linear-gradient(to bottom, oklch(0.09 0.015 10) 0%, transparent 18%),
+			linear-gradient(to bottom, transparent 60%, oklch(0.09 0.015 10) 100%);
+	}
 
-  .emerge-text {
-    max-width: 44ch;
-  }
+	.emerge-photo {
+		width: 100%;
+		height: clamp(320px, 60vh, 680px);
+		object-fit: cover;
+		object-position: center center;
+		display: block;
+	}
 
-  .emerge-heading {
-    font-family: 'Bungee', sans-serif;
-    font-size: clamp(2rem, 5vw, 4rem);
-    color: oklch(0.96 0.008 80);
-    line-height: 1.05;
-    margin: 0 0 clamp(1.25rem, 3vw, 2rem);
-    letter-spacing: -0.01em;
-  }
+	.emerge-text {
+		max-width: 54ch;
+	}
 
-  .emerge-text p {
-    font-family: 'Jost', sans-serif;
-    font-size: clamp(0.95rem, 1.5vw, 1.05rem);
-    line-height: 1.8;
-    color: oklch(0.72 0.01 80);
-    margin: 0 0 1rem;
-    max-width: 44ch;
-  }
+	.emerge-heading {
+		font-family: "Bungee", sans-serif;
+		font-size: clamp(2rem, 5vw, 4rem);
+		color: oklch(0.96 0.008 80);
+		line-height: 1.05;
+		margin: 0 0 clamp(1.25rem, 3vw, 2rem);
+		letter-spacing: -0.01em;
+	}
 
-  .emerge-kicker {
-    font-family: 'Bungee', sans-serif;
-    font-size: clamp(1rem, 2vw, 1.25rem);
-    color: oklch(0.76 0.13 82) !important;
-    line-height: 1.4;
-    margin-top: clamp(1.5rem, 3vw, 2.5rem) !important;
-  }
+	.emerge-text p {
+		font-family: "Jost", sans-serif;
+		font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+		line-height: 1.8;
+		color: oklch(0.72 0.01 80);
+		margin: 0 0 1rem;
+		max-width: 54ch;
+	}
+
+	.emerge-kicker {
+		font-family: "Bungee", sans-serif;
+		font-size: clamp(1rem, 2vw, 1.25rem);
+		color: oklch(0.82 0.2 322) !important;
+		line-height: 1.4;
+		margin-top: clamp(1.5rem, 3vw, 2.5rem) !important;
+		text-shadow:
+			0 0 6px oklch(0.62 0.26 322 / 0.7),
+			0 0 18px oklch(0.62 0.26 322 / 0.4),
+			0 0 40px oklch(0.62 0.26 322 / 0.2);
+	}
 </style>

@@ -1,0 +1,379 @@
+---
+interface Props {
+	variant?: "sunburst" | "arc";
+	accent?: "purple" | "amber" | "acid";
+}
+
+const { variant = "sunburst", accent = "purple" } = Astro.props;
+
+const hues = {
+	purple: "oklch(0.62 0.26 322)",
+	amber: "oklch(0.72 0.14 70)",
+	acid: "oklch(0.82 0.16 135)",
+} as const;
+const color = hues[accent];
+
+// ── Seesaw path — 15 deterministic turning points (8 peaks, 7 valleys) ───────
+const seesawPts: [number, number][] = [
+	[10, 22], // 0 peak
+	[37, 74], // 1 valley
+	[66, 16], // 2 peak
+	[93, 78], // 3 valley
+	[120, 26], // 4 peak
+	[149, 70], // 5 valley
+	[174, 14], // 6 peak  ← tallest, near centre
+	[203, 82], // 7 valley ← deepest
+	[228, 18], // 8 peak
+	[257, 72], // 9 valley
+	[282, 28], // 10 peak
+	[311, 76], // 11 valley
+	[338, 20], // 12 peak
+	[363, 80], // 13 valley
+	[390, 24], // 14 peak
+];
+
+const seesawPath = seesawPts.map(([x, y], i) => `${i === 0 ? "M" : "L"} ${x} ${y}`).join(" ");
+
+const seesawLength = Math.round(
+	seesawPts.reduce((len, [x, y], i) => {
+		if (i === 0) return 0;
+		const [px, py] = seesawPts[i - 1];
+		return len + Math.hypot(x - px, y - py);
+	}, 0),
+);
+---
+
+<div class={`ornament ornament--${variant}`} aria-hidden="true" style={`--ornament-color: ${color};`}>
+	{
+		variant === "sunburst" && (
+			<svg viewBox="0 0 400 120" preserveAspectRatio="xMidYMid meet" class="ornament-svg" overflow="visible">
+				<g class="sunburst">
+					<g class="rays">
+						{Array.from({ length: 13 }).map((_, i) => {
+							const angle = -90 + (i - 6) * 14 + (i % 2 === 0 ? 2 : -2);
+							const rad = (angle * Math.PI) / 180;
+							const inner = 22 + (i % 3) * 2;
+							const outer = 42 + ((i * 7) % 14);
+							const x1 = 200 + Math.cos(rad) * inner;
+							const y1 = 78 + Math.sin(rad) * inner;
+							const x2 = 200 + Math.cos(rad) * outer;
+							const y2 = 78 + Math.sin(rad) * outer;
+							return <line x1={x1} y1={y1} x2={x2} y2={y2} stroke-linecap="round" />;
+						})}
+					</g>
+					<circle cx="200" cy="78" r="9" class="sun-body" />
+					<path d="M 60 100 Q 120 96, 180 100 T 340 100" class="horizon horizon-1" fill="none" />
+					<path d="M 40 108 Q 110 104, 180 108 T 360 108" class="horizon horizon-2" fill="none" />
+				</g>
+			</svg>
+		)
+	}
+
+	{
+		variant === "arc" && (
+			<svg
+				viewBox="0 0 400 100"
+				preserveAspectRatio="xMidYMid meet"
+				class="ornament-svg"
+				overflow="visible"
+				data-length={seesawLength}
+			>
+				<defs>
+					{/* Inline blur — CSS filter:blur on SVG paths gets browser-clipped */}
+					<filter id="ss-halo-blur" x="-20%" y="-120%" width="140%" height="340%">
+						<feGaussianBlur stdDeviation="7" />
+					</filter>
+				</defs>
+				<g class="seesaw-sign">
+					{/* Persistent dim neon presence */}
+					<path d={seesawPath} class="ss-halo" fill="none" filter="url(#ss-halo-blur)" />
+					<path d={seesawPath} class="ss-mid" fill="none" />
+					<path d={seesawPath} class="ss-core" fill="none" />
+
+					{/* Laser bolt — JS-driven, normally hidden */}
+					<path d={seesawPath} class="ss-laser-trail" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+					<path d={seesawPath} class="ss-laser-head" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+
+					{/* Post-fire overload bloom */}
+					<path d={seesawPath} class="ss-overload" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+				</g>
+			</svg>
+		)
+	}
+</div>
+
+<style>
+	.ornament {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		padding: clamp(1.5rem, 4vw, 3rem) 1rem;
+		position: relative;
+		z-index: 1;
+	}
+
+	.ornament--sunburst {
+		background: oklch(0.13 0.022 40);
+	}
+
+	.ornament-svg {
+		width: min(520px, 72vw);
+		height: auto;
+		overflow: visible;
+	}
+
+	/* ── Sunburst ──────────────────────────────────────────────────────── */
+
+	.sunburst .rays line {
+		stroke: var(--ornament-color);
+		stroke-width: 1.5;
+		filter: drop-shadow(0 0 4px var(--ornament-color)) drop-shadow(0 0 10px var(--ornament-color));
+		opacity: 0.85;
+		transform-origin: 200px 78px;
+		animation: ray-pulse 3.2s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+	}
+	.sunburst .rays line:nth-child(2n) {
+		animation-delay: -0.6s;
+		animation-duration: 2.6s;
+	}
+	.sunburst .rays line:nth-child(3n) {
+		animation-delay: -1.2s;
+		animation-duration: 3.8s;
+	}
+	.sunburst .rays line:nth-child(5n) {
+		animation-delay: -1.9s;
+	}
+
+	.sun-body {
+		fill: var(--ornament-color);
+		filter: drop-shadow(0 0 6px var(--ornament-color)) drop-shadow(0 0 16px var(--ornament-color))
+			drop-shadow(0 0 30px var(--ornament-color));
+		transform-origin: 200px 78px;
+		animation: sun-breath 5s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+	}
+
+	.horizon {
+		stroke: var(--ornament-color);
+		stroke-width: 1.2;
+		stroke-linecap: round;
+		opacity: 0.55;
+		filter: drop-shadow(0 0 4px var(--ornament-color));
+	}
+	.horizon-2 {
+		opacity: 0.3;
+		stroke-width: 1;
+	}
+
+	@keyframes ray-pulse {
+		0%,
+		100% {
+			opacity: 0.85;
+			transform: scale(1);
+		}
+		50% {
+			opacity: 0.4;
+			transform: scale(0.92);
+		}
+	}
+	@keyframes sun-breath {
+		0%,
+		100% {
+			transform: scale(1);
+			filter: drop-shadow(0 0 6px var(--ornament-color)) drop-shadow(0 0 16px var(--ornament-color))
+				drop-shadow(0 0 30px var(--ornament-color));
+		}
+		50% {
+			transform: scale(1.12);
+			filter: drop-shadow(0 0 10px var(--ornament-color)) drop-shadow(0 0 24px var(--ornament-color))
+				drop-shadow(0 0 55px var(--ornament-color));
+		}
+	}
+
+	/* ── Laser lightning bolt ──────────────────────────────────────────── */
+
+	.ss-halo {
+		stroke: var(--ornament-color);
+		stroke-width: 26;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		opacity: 0.18;
+		animation: ss-halo-pulse 4s ease-in-out infinite;
+	}
+	.ss-mid {
+		stroke: var(--ornament-color);
+		stroke-width: 6;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		opacity: 0.65;
+		filter: drop-shadow(0 0 5px var(--ornament-color));
+		animation: ss-mid-pulse 4s ease-in-out infinite;
+		animation-delay: -0.5s;
+	}
+	.ss-core {
+		stroke: oklch(0.97 0.03 322);
+		stroke-width: 2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		opacity: 1;
+		filter: drop-shadow(0 0 5px var(--ornament-color)) drop-shadow(0 0 12px var(--ornament-color));
+		animation: ss-core-pulse 4s ease-in-out infinite;
+		animation-delay: -1.1s;
+	}
+
+	/* Laser layers — opacity/dashoffset driven by inline script */
+	.ss-laser-trail {
+		stroke: var(--ornament-color);
+		stroke-width: 10;
+		opacity: 0;
+		filter: drop-shadow(0 0 10px var(--ornament-color)) drop-shadow(0 0 24px var(--ornament-color));
+	}
+	.ss-laser-head {
+		stroke: white;
+		stroke-width: 3.5;
+		opacity: 0;
+		filter: drop-shadow(0 0 8px white) drop-shadow(0 0 20px var(--ornament-color));
+	}
+	.ss-overload {
+		stroke: oklch(0.97 0.03 322);
+		stroke-width: 3.5;
+		opacity: 0;
+		filter: drop-shadow(0 0 10px var(--ornament-color)) drop-shadow(0 0 30px var(--ornament-color))
+			drop-shadow(0 0 60px var(--ornament-color));
+	}
+
+	@keyframes ss-halo-pulse {
+		0%,
+		100% {
+			opacity: 0.18;
+		}
+		50% {
+			opacity: 0.07;
+		}
+	}
+	@keyframes ss-mid-pulse {
+		0%,
+		100% {
+			opacity: 0.65;
+		}
+		50% {
+			opacity: 0.28;
+		}
+	}
+	@keyframes ss-core-pulse {
+		0%,
+		100% {
+			opacity: 1;
+		}
+		50% {
+			opacity: 0.6;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.sunburst .rays line,
+		.sun-body,
+		.ss-halo,
+		.ss-mid,
+		.ss-core {
+			animation: none !important;
+		}
+		.ss-laser-trail,
+		.ss-laser-head,
+		.ss-overload {
+			display: none;
+		}
+	}
+</style>
+
+<script>
+	// Use per-element flag so HMR doesn't double-init, and each SVG manages itself.
+	document.querySelectorAll<SVGSVGElement>(".ornament--arc .ornament-svg[data-length]").forEach((svg) => {
+		if ((svg as any)._laserInit) return;
+		(svg as any)._laserInit = true;
+
+		const length = parseInt(svg.dataset.length ?? "875");
+		const trail = svg.querySelector<SVGPathElement>(".ss-laser-trail")!;
+		const head = svg.querySelector<SVGPathElement>(".ss-laser-head")!;
+		const over = svg.querySelector<SVGPathElement>(".ss-overload")!;
+		if (!trail || !head || !over) return;
+
+		// ── Per-element animation state ────────────────────────────────
+		let phase: "idle" | "beam" | "bloom" = "idle";
+		let beamT = 0;
+		let beamDur = 0.35;
+		let bloomT = 0;
+		let startOff = 0;
+		let endOff = -length;
+		let lastNow = performance.now();
+
+		function tick(now: number) {
+			if (!svg.isConnected) return;
+			const dt = Math.min(0.05, (now - lastNow) / 1000);
+			lastNow = now;
+
+			if (phase === "beam") {
+				beamT = Math.min(1, beamT + dt / beamDur);
+				const offset = startOff + (endOff - startOff) * beamT;
+				trail.style.strokeDashoffset = offset + "px";
+				head.style.strokeDashoffset = offset + "px";
+				trail.style.opacity = String(0.88 * (1 - beamT * 0.3));
+				head.style.opacity = String(1 - beamT * 0.12);
+
+				if (beamT >= 1) {
+					trail.style.opacity = "0";
+					head.style.opacity = "0";
+					phase = "bloom";
+					bloomT = 0;
+					over.style.opacity = "0.88";
+				}
+				requestAnimationFrame(tick);
+			} else if (phase === "bloom") {
+				bloomT = Math.min(1, bloomT + dt / 0.85);
+				over.style.opacity = String(0.88 * Math.pow(1 - bloomT, 1.7));
+				if (bloomT >= 1) {
+					over.style.opacity = "0";
+					phase = "idle";
+					scheduleNext();
+					return;
+				}
+				requestAnimationFrame(tick);
+			}
+		}
+
+		function fire() {
+			if (!svg.isConnected) return;
+
+			const dur = 0.26 + Math.random() * 0.18;
+			const reversed = Math.random() < 0.28;
+			const trailLen = Math.round(70 + Math.random() * 90);
+			const headLen = Math.round(5 + Math.random() * 6);
+			const gap = length + 400;
+
+			trail.setAttribute("stroke-dasharray", `${trailLen} ${gap}`);
+			head.setAttribute("stroke-dasharray", `${headLen} ${gap}`);
+
+			startOff = reversed ? -length : 0;
+			endOff = reversed ? 0 : -length;
+			beamT = 0;
+			beamDur = dur;
+			phase = "beam";
+
+			lastNow = performance.now();
+			requestAnimationFrame(tick);
+		}
+
+		function scheduleNext() {
+			// Occasionally double-fire (two rapid shots)
+			if (Math.random() < 0.22) {
+				setTimeout(fire, 120 + Math.random() * 200);
+				setTimeout(scheduleNext, 600 + Math.random() * 400);
+			} else {
+				setTimeout(fire, 2000 + Math.random() * 4000);
+			}
+		}
+
+		// Stagger initial fire so dual ornaments don't sync
+		setTimeout(fire, 1000 + Math.random() * 2500);
+	});
+</script>

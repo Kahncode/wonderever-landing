@@ -7,11 +7,19 @@ import { images } from "../assets/images";
 	<div class="hero-photo-wrap">
 		<Image src={images.night.src} alt={images.night.alt} width={1920} class="hero-photo" loading="eager" />
 		<div class="hero-overlay"></div>
+
+		<!-- Heat shimmer: duplicated bottom band of the hero photo, distorted by SVG filter -->
+		<div class="heat-shimmer" aria-hidden="true">
+			<Image src={images.night.src} alt="" width={1920} class="heat-shimmer-photo" loading="eager" />
+		</div>
 	</div>
 
 	<div class="hero-content">
 		<p class="hero-since">Since 2013</p>
-		<h1 class="wordmark">WONDEREVER</h1>
+		<div class="wordmark-frame">
+			<span class="wordmark-halo" aria-hidden="true"></span>
+			<h1 class="wordmark" data-text="WONDEREVER">WONDEREVER</h1>
+		</div>
 		<p class="hero-tagline">The best kept secret on the playa</p>
 		<p class="hero-meta">
 			<span>Elsewhere 2026 · July 7–12</span>
@@ -29,23 +37,154 @@ import { images } from "../assets/images";
 </section>
 
 <style>
-	@keyframes flicker {
-		0%,
-		88%,
+	/* ── Wordmark: power-on → breathe → occasional flicker ────────────────── */
+
+	@keyframes power-on {
+		0% {
+			opacity: 0;
+			filter: brightness(0.2);
+		}
+		8% {
+			opacity: 0.9;
+			filter: brightness(2.2);
+		}
+		10% {
+			opacity: 0.05;
+			filter: brightness(0.4);
+		}
+		14% {
+			opacity: 0.9;
+			filter: brightness(1.8);
+		}
+		16% {
+			opacity: 0.1;
+			filter: brightness(0.3);
+		}
+		22% {
+			opacity: 0.95;
+			filter: brightness(1.6);
+		}
+		25% {
+			opacity: 0.3;
+			filter: brightness(0.8);
+		}
+		34% {
+			opacity: 1;
+			filter: brightness(1.3);
+		}
+		38% {
+			opacity: 0.6;
+			filter: brightness(0.9);
+		}
+		48% {
+			opacity: 1;
+			filter: brightness(1.25);
+		}
+		55% {
+			opacity: 0.85;
+			filter: brightness(1.05);
+		}
 		100% {
 			opacity: 1;
+			filter: brightness(1);
 		}
-		89% {
+	}
+
+	@keyframes flicker {
+		0%,
+		62%,
+		65%,
+		68%,
+		72%,
+		100% {
+			opacity: 1;
+			filter: brightness(1);
+		}
+		63% {
+			opacity: 0.55;
+			filter: brightness(0.7);
+		}
+		66% {
+			opacity: 0.92;
+			filter: brightness(1.1);
+		}
+		69% {
+			opacity: 0.35;
+			filter: brightness(0.55);
+		}
+		70% {
+			opacity: 0.96;
+			filter: brightness(1.15);
+		}
+		71% {
+			opacity: 0.72;
+			filter: brightness(0.85);
+		}
+		88% {
 			opacity: 0.86;
+			filter: brightness(0.95);
+		}
+		90% {
+			opacity: 1;
+			filter: brightness(1.18);
 		}
 		91% {
-			opacity: 0.94;
+			opacity: 0.6;
+			filter: brightness(0.8);
 		}
-		93% {
-			opacity: 0.78;
+	}
+
+	@keyframes halo-breath {
+		0%,
+		100% {
+			opacity: 0.6;
+			transform: translate(-50%, -50%) scale(1);
 		}
-		95% {
-			opacity: 0.96;
+		50% {
+			opacity: 0.95;
+			transform: translate(-50%, -50%) scale(1.08);
+		}
+	}
+
+	@keyframes halo-flicker {
+		0%,
+		62%,
+		65%,
+		68%,
+		72%,
+		100% {
+			filter: brightness(1);
+		}
+		63% {
+			filter: brightness(0.45);
+		}
+		66% {
+			filter: brightness(1.15);
+		}
+		69% {
+			filter: brightness(0.3);
+		}
+		70% {
+			filter: brightness(1.2);
+		}
+		91% {
+			filter: brightness(0.5);
+		}
+	}
+
+	@keyframes electric-hum {
+		0%,
+		100% {
+			transform: translateX(0) translateY(0);
+		}
+		25% {
+			transform: translateX(0.3px) translateY(-0.2px);
+		}
+		50% {
+			transform: translateX(-0.2px) translateY(0.3px);
+		}
+		75% {
+			transform: translateX(0.2px) translateY(0.2px);
 		}
 	}
 
@@ -58,6 +197,8 @@ import { images } from "../assets/images";
 			transform: translateY(9px);
 		}
 	}
+
+	/* ── Hero layout ──────────────────────────────────────────────────────── */
 
 	.hero {
 		position: relative;
@@ -92,6 +233,51 @@ import { images } from "../assets/images";
 			oklch(0.08 0.015 10 / 0.72) 80%,
 			oklch(0.08 0.015 10) 100%
 		);
+		z-index: 2;
+	}
+
+	/* ── Heat shimmer: clipped duplicate of the photo at the bottom ──────── */
+
+	.heat-shimmer {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 32%;
+		overflow: hidden;
+		z-index: 1;
+		pointer-events: none;
+		mix-blend-mode: screen;
+		opacity: 0.55;
+		-webkit-mask-image: linear-gradient(
+			to bottom,
+			transparent 0%,
+			rgba(0, 0, 0, 0.6) 30%,
+			rgba(0, 0, 0, 1) 60%,
+			rgba(0, 0, 0, 0.5) 100%
+		);
+		mask-image: linear-gradient(
+			to bottom,
+			transparent 0%,
+			rgba(0, 0, 0, 0.6) 30%,
+			rgba(0, 0, 0, 1) 60%,
+			rgba(0, 0, 0, 0.5) 100%
+		);
+	}
+
+	.heat-shimmer-photo {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center bottom;
+		filter: url(#heat-shimmer) saturate(1.15) contrast(1.05);
+		will-change: filter;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.heat-shimmer {
+			display: none;
+		}
 	}
 
 	.hero-content {
@@ -110,28 +296,76 @@ import { images } from "../assets/images";
 		font-family: "Jost", sans-serif;
 		font-weight: 300;
 		font-size: clamp(0.95rem, 2.2vw, 1.4rem);
-		color: oklch(0.88 0.008 80);
+		color: oklch(0.97 0.01 80);
 		margin: 0;
 		letter-spacing: 0.04em;
 		line-height: 1.6;
-		text-shadow: 0 1px 10px oklch(0.06 0.01 10 / 0.9);
+		text-shadow:
+			0 1px 2px oklch(0.04 0.01 10),
+			0 0 12px oklch(0.04 0.01 10 / 0.95),
+			0 0 30px oklch(0.04 0.01 10 / 0.85),
+			0 0 55px oklch(0.04 0.01 10 / 0.7),
+			0 0 8px oklch(0.97 0.01 80 / 0.4),
+			0 0 22px oklch(0.72 0.14 70 / 0.25);
+	}
+
+	/* ── Wordmark: the big neon moment ──────────────────────────────────── */
+
+	.wordmark-frame {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		isolation: isolate;
+	}
+
+	.wordmark-halo {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 115%;
+		height: 220%;
+		transform: translate(-50%, -50%);
+		pointer-events: none;
+		z-index: -1;
+		background:
+			radial-gradient(
+				ellipse 60% 70% at 50% 50%,
+				oklch(0.62 0.26 322 / 0.55) 0%,
+				oklch(0.62 0.26 322 / 0.25) 30%,
+				oklch(0.62 0.26 322 / 0.08) 55%,
+				transparent 75%
+			),
+			radial-gradient(ellipse 90% 50% at 50% 50%, oklch(0.72 0.14 70 / 0.15) 0%, transparent 60%);
+		filter: blur(30px);
+		animation:
+			halo-breath 4.5s cubic-bezier(0.37, 0, 0.63, 1) infinite,
+			halo-flicker 16s infinite;
+		mix-blend-mode: screen;
 	}
 
 	.wordmark {
+		position: relative;
 		font-family: "Monoton", cursive;
 		font-size: clamp(2rem, 9.5vw, 9rem);
 		font-weight: 400;
 		color: oklch(0.97 0.01 10);
-		text-shadow:
-			0 0 8px white,
-			0 0 28px oklch(0.62 0.26 322),
-			0 0 60px oklch(0.62 0.26 322 / 0.85),
-			0 0 110px oklch(0.62 0.26 322 / 0.55),
-			0 0 190px oklch(0.62 0.26 322 / 0.3);
-		animation: flicker 16s infinite;
 		line-height: 1.05;
 		margin: 0;
 		letter-spacing: 0.04em;
+		text-shadow:
+			0 0 4px oklch(0.98 0.02 322),
+			0 0 10px oklch(0.95 0.08 322),
+			0 0 22px oklch(0.75 0.24 322 / 0.95),
+			0 0 45px oklch(0.62 0.26 322 / 0.85),
+			0 0 80px oklch(0.62 0.26 322 / 0.65),
+			0 0 140px oklch(0.55 0.28 322 / 0.45),
+			0 0 220px oklch(0.72 0.14 70 / 0.35);
+		animation:
+			power-on 2.2s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both,
+			flicker 9s 2.4s infinite,
+			electric-hum 0.12s steps(3) infinite;
+		will-change: opacity, filter, transform;
 	}
 
 	.hero-tagline {
@@ -208,5 +442,17 @@ import { images } from "../assets/images";
 
 	.hero-scroll:hover {
 		color: oklch(0.65 0.01 80);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.wordmark,
+		.wordmark-halo,
+		.hero-scroll {
+			animation: none !important;
+		}
+		.wordmark {
+			opacity: 1;
+			filter: none;
+		}
 	}
 </style>

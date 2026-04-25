@@ -1,103 +1,107 @@
 ---
-import { Image } from 'astro:assets';
-import { images } from '../assets/images';
+import { Image } from "astro:assets";
+import { images } from "../assets/images";
 ---
 
 <section class="community" aria-label="The Wonderlings">
-  <figure class="community-photo-wrap">
-    <Image
-      src={images.people.src}
-      alt={images.people.alt}
-      width={1400}
-      class="community-photo"
-    />
-    <div class="community-photo-overlay"></div>
-  </figure>
+	<figure class="community-photo-wrap">
+		<Image src={images.people.src} alt={images.people.alt} width={1400} class="community-photo" />
+		<div class="community-photo-overlay"></div>
+	</figure>
 
-  <div class="community-text">
-    <h2 class="community-heading">40 wonderful<br />wanderers</h2>
-    <p>
-      Co-creators, not spectators. Wonderlings build and strike the camp, cook,
-      run shifts, make art, and show up for each other in the heat and dust.
-      Most of us keep coming back every year.
-    </p>
+	<div class="community-text">
+		<h2 class="community-heading">wonderful<br />wanderers</h2>
+		<p>
+			Everybody participates, everybody takes shifts. No pay-to-play, no passengers. Bring ideas, bring initiative,
+			start something, mess with the plan, defend the barrio from hangover hippies looking for a siesta spot. We want
+			your energy!
+		</p>
+		<p>
+			Build week is where the best friendships are forged. We set ambitious goals. Come help us raise the craziest
+			structure on the playa.
+		</p>
+		<p>Come for the hammocks. Stay for the people.</p>
 
-    <div class="community-tags">
-      <span>open to all</span>
-      <span>LGBTQ+ friendly</span>
-      <span>totally not a cult</span>
-    </div>
-  </div>
+		<div class="community-tags">
+			<span>open to all</span>
+			<span>LGBTQ+ friendly</span>
+			<span>totally not a cult</span>
+			<span>agentic-AI powered</span>
+			<span>sponsored by Makita</span>
+		</div>
+	</div>
 </section>
 
 <style>
-  .community {
-    background: oklch(0.13 0.022 40);
-  }
+	.community {
+		background: oklch(0.13 0.022 40);
+	}
 
-  .community-photo-wrap {
-    margin: 0;
-    position: relative;
-    overflow: hidden;
-  }
+	.community-photo-wrap {
+		margin: 0;
+		position: relative;
+		overflow: hidden;
+	}
 
-  .community-photo {
-    width: 100%;
-    height: clamp(340px, 58vh, 680px);
-    object-fit: cover;
-    object-position: center 30%;
-    display: block;
-  }
+	.community-photo {
+		width: 100%;
+		height: clamp(340px, 58vh, 680px);
+		object-fit: cover;
+		object-position: center 30%;
+		display: block;
+	}
 
-  .community-photo-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to bottom,
-      transparent 50%,
-      oklch(0.13 0.022 40 / 0.80) 100%
-    );
-  }
+	.community-photo-overlay {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			to bottom,
+			oklch(0.13 0.022 40) 0%,
+			transparent 20%,
+			transparent 55%,
+			oklch(0.13 0.022 40 / 0.85) 100%
+		);
+	}
 
-  .community-text {
-    max-width: 1360px;
-    margin: 0 auto;
-    padding: clamp(3rem, 6vw, 6rem) clamp(1.5rem, 6vw, 5rem);
-  }
+	.community-text {
+		max-width: 1360px;
+		margin: 0 auto;
+		padding: clamp(3rem, 6vw, 6rem) clamp(1.5rem, 6vw, 5rem);
+	}
 
-  .community-heading {
-    font-family: 'Bungee', sans-serif;
-    font-size: clamp(2.5rem, 6vw, 5.5rem);
-    color: oklch(0.96 0.008 80);
-    line-height: 1.0;
-    margin: 0 0 clamp(1.25rem, 3vw, 2rem);
-    letter-spacing: -0.01em;
-    max-width: 14ch;
-  }
+	.community-heading {
+		font-family: "Bungee", sans-serif;
+		font-size: clamp(2.5rem, 6vw, 5.5rem);
+		color: oklch(0.96 0.008 80);
+		line-height: 1;
+		margin: 0 0 clamp(1.25rem, 3vw, 2rem);
+		letter-spacing: -0.01em;
+		max-width: 14ch;
+	}
 
-  .community-text p {
-    font-family: 'Jost', sans-serif;
-    font-size: clamp(0.95rem, 1.5vw, 1.05rem);
-    line-height: 1.8;
-    color: oklch(0.72 0.012 80);
-    margin: 0 0 1rem;
-    max-width: 52ch;
-  }
+	.community-text p {
+		font-family: "Jost", sans-serif;
+		font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+		line-height: 1.8;
+		color: oklch(0.72 0.012 80);
+		margin: 0 0 1rem;
+		max-width: 52ch;
+	}
 
-  .community-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem 1rem;
-  }
+	.community-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem 1rem;
+	}
 
-  .community-tags span {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: oklch(0.60 0.012 80);
-    padding: 0.35rem 0.75rem;
-    border: 1px solid oklch(0.30 0.015 10);
-  }
+	.community-tags span {
+		font-family: "Jost", sans-serif;
+		font-size: 0.72rem;
+		font-weight: 500;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		color: oklch(0.6 0.012 80);
+		padding: 0.35rem 0.75rem;
+		border: 1px solid oklch(0.3 0.015 10);
+	}
 </style>

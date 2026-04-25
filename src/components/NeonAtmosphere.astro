@@ -1,0 +1,546 @@
+---
+// Site-wide atmospheric canvas for Wonderever.
+//   • Shooting stars  — sky band above the wordmark, cool/short, distant.
+//   • Cursor neon trail — top of doc only; fades to nothing by mid-scroll.
+//   • Ambient smoke/dust — volumetric puffs that rise, spread, and dissolve.
+//     Density intensifies with scroll. Per-puff heat-shimmer wobble.
+//   • Click effects — neon beams (top) or smoke burst (bottom).
+//     Fires on ANY click including keyboard button activation.
+---
+
+<canvas class="atmosphere" aria-hidden="true"></canvas>
+
+<style>
+	.atmosphere {
+		position: fixed;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+		z-index: 9998;
+		mix-blend-mode: screen;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.atmosphere { display: none; }
+	}
+</style>
+
+<script>
+	// Guard: Astro HMR can re-execute inline scripts. Bail if already running.
+	if (!(window as any).__wAtmInit) {
+		(window as any).__wAtmInit = true;
+
+	// ─── Types ────────────────────────────────────────────────────────────
+
+	type Puff = {
+		x: number; y: number;
+		vx: number; vy: number;
+		life: number; maxLife: number;
+		spriteIdx: number;
+		scale: number;          // initial draw-size multiplier
+		growthRate: number;     // how much scale increases per unit life
+		alpha: number;
+		windPhase: number;
+		turbPhase: number;      // per-puff heat-shimmer phase
+		turbFreq: number;
+		warm: boolean;
+	};
+
+	type Trail = {
+		x: number; y: number;
+		vx: number; vy: number;
+		life: number; maxLife: number;
+		size: number;
+	};
+
+	type Star = {
+		x: number; y: number;
+		vx: number; vy: number;
+		length: number;
+		life: number; maxLife: number;
+	};
+
+	type Beam = {
+		x: number; y: number;
+		dx: number; dy: number;
+		speed: number; length: number;
+		life: number; maxLife: number;
+	};
+
+	type Flash = {
+		x: number; y: number;
+		life: number; maxLife: number;
+		radius: number;
+	};
+
+	// ─── Canvas & state ──────────────────────────────────────────────────
+
+	const reduced     = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	const finePointer = window.matchMedia('(pointer: fine)').matches;
+	if (!reduced) {
+
+	const canvas = document.querySelector<HTMLCanvasElement>('canvas.atmosphere');
+	if (canvas) {
+	const ctx = canvas.getContext('2d', { alpha: true });
+	if (ctx) {
+
+	let dpr = Math.min(window.devicePixelRatio || 1, 2);
+	let w = 0, h = 0, docHeight = 0;
+
+	const puffs: Puff[]    = [];
+	const trail: Trail[]   = [];
+	const stars: Star[]    = [];
+	const beams: Beam[]    = [];
+	const flashes: Flash[] = [];
+
+	const MAX_TRAIL  = 200;
+	const MAX_BEAMS  = 80;
+	const MAX_PUFFS  = 350;
+
+	function resize() {
+		dpr       = Math.min(window.devicePixelRatio || 1, 2);
+		w         = window.innerWidth;
+		h         = window.innerHeight;
+		docHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+		canvas!.width  = Math.floor(w * dpr);
+		canvas!.height = Math.floor(h * dpr);
+		canvas!.style.width  = w + 'px';
+		canvas!.style.height = h + 'px';
+		ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+	}
+	resize();
+	window.addEventListener('resize', resize, { passive: true });
+
+	let scrollProgress = 0;
+	function readScroll() {
+		const max = Math.max(1, docHeight - h);
+		scrollProgress = Math.min(1, Math.max(0, window.scrollY / max));
+	}
+	readScroll();
+	window.addEventListener('scroll', readScroll, { passive: true });
+
+	// ─── Pre-render puff sprites ────────────────────────────────────────
+
+	type Sprite = { canvas: HTMLCanvasElement; size: number };
+	function makePuff(size: number, warm: boolean): Sprite {
+		const c   = document.createElement('canvas');
+		c.width   = size * 2;
+		c.height  = size * 2;
+		const cx  = c.getContext('2d')!;
+		const g   = cx.createRadialGradient(size, size, 0, size, size, size);
+		if (warm) {
+			g.addColorStop(0.0, 'rgba(230, 170, 110, 0.60)');
+			g.addColorStop(0.3, 'rgba(195, 130,  80, 0.26)');
+			g.addColorStop(0.65,'rgba(165, 100,  60, 0.08)');
+			g.addColorStop(1.0, 'rgba(150,  90,  55, 0)');
+		} else {
+			g.addColorStop(0.0, 'rgba(215, 185, 145, 0.58)');
+			g.addColorStop(0.3, 'rgba(178, 148, 115, 0.26)');
+			g.addColorStop(0.65,'rgba(155, 125,  95, 0.08)');
+			g.addColorStop(1.0, 'rgba(140, 110,  82, 0)');
+		}
+		cx.fillStyle = g;
+		cx.fillRect(0, 0, size * 2, size * 2);
+		return { canvas: c, size };
+	}
+
+	const sandSprites:  Sprite[] = [50, 85, 130, 185].map(s => makePuff(s, false));
+	const emberSprites: Sprite[] = [40, 70, 115      ].map(s => makePuff(s, true));
+
+	// ─── Puff spawn ──────────────────────────────────────────────────────
+
+	function spawnPuff(seed = false, overrideX?: number, overrideY?: number, burst = false) {
+		if (puffs.length >= MAX_PUFFS) return;
+
+		const warm   = Math.random() < 0.20;
+		const arr    = warm ? emberSprites : sandSprites;
+		const si     = Math.floor(Math.random() * arr.length);
+		const sprite = arr[si];
+
+		// Origin
+		let x: number, y: number, vx: number, vy: number;
+
+		if (burst) {
+			// Click burst: cluster near origin, shoot strongly upward
+			x  = (overrideX ?? w / 2) + (Math.random() - 0.5) * 30;
+			y  = overrideY ?? h / 2;
+			vx = (Math.random() - 0.5) * 55;
+			vy = -(80 + Math.random() * 110);
+		} else {
+			const fromSide = Math.random() < 0.08 + 0.38 * scrollProgress;
+			x = fromSide
+				? (Math.random() < 0.5 ? -120 : w + 120)
+				: (overrideX ?? Math.random() * w);
+			y = seed
+				? Math.random() * h
+				: fromSide
+					? h * 0.2 + Math.random() * h * 0.8
+					: h + 60 + Math.random() * 100;
+
+			const wind = (0.5 + Math.random()) * (0.4 + 1.4 * scrollProgress);
+			vx = fromSide
+				? (x < 0 ? wind * 30 : -wind * 30)
+				: (Math.random() - 0.5) * 10;
+			vy = -(12 + Math.random() * 22) * (0.7 + 0.5 * scrollProgress);
+		}
+
+		puffs.push({
+			x, y, vx, vy,
+			life: seed ? Math.random() * 6 : 0,
+			maxLife: burst ? 1.0 + Math.random() * 0.6 : 7 + Math.random() * 9,
+			spriteIdx: si,
+			scale:      burst ? 0.35 + Math.random() * 0.35 : 0.55 + Math.random() * 0.70,
+			growthRate: burst ? 0.50 + Math.random() * 0.40 : 0.35 + Math.random() * 0.30,
+			alpha:      (warm ? 0.20 : 0.30) * (0.6 + 0.7 * Math.random()) * (burst ? 1.4 : 1),
+			windPhase:  Math.random() * Math.PI * 2,
+			turbPhase:  Math.random() * Math.PI * 2,
+			turbFreq:   0.7 + Math.random() * 1.0,
+			warm,
+		});
+	}
+
+	for (let i = 0; i < 28; i++) spawnPuff(true);
+
+	// ─── Cursor trail (neon, top of page only) ───────────────────────────
+
+	let mx = -1000, my = -1000, lastMx = mx, lastMy = my, lastMoveAt = 0;
+
+	function neonStrength() {
+		const t = (scrollProgress - 0.18) / 0.32;
+		if (t <= 0) return 1;
+		if (t >= 1) return 0;
+		return 1 - t * t * (3 - 2 * t); // smoothstep
+	}
+
+	if (finePointer) {
+		window.addEventListener('pointermove', (e) => {
+			if (e.pointerType === 'touch') return;
+			lastMx = mx; lastMy = my;
+			mx = e.clientX; my = e.clientY;
+			lastMoveAt = performance.now();
+			const ns = neonStrength();
+			if (ns < 0.04) return;
+			const dx   = mx - lastMx, dy = my - lastMy;
+			const dist = Math.hypot(dx, dy);
+			const steps = Math.min(6, Math.ceil(dist / 8));
+			for (let i = 0; i < steps; i++) {
+				const t  = i / steps;
+				spawnTrail(lastMx + dx * t + (Math.random() - 0.5) * 2,
+				           lastMy + dy * t + (Math.random() - 0.5) * 2, ns);
+			}
+			if (steps === 0) spawnTrail(mx, my, ns);
+		}, { passive: true });
+	}
+
+	function spawnTrail(x: number, y: number, strength: number) {
+		if (trail.length > MAX_TRAIL) return;
+		trail.push({
+			x, y,
+			vx: (Math.random() - 0.5) * 22 * strength,
+			vy: (Math.random() - 0.5) * 22 * strength - 6 * strength,
+			life: 0, maxLife: 0.40 + Math.random() * 0.28,
+			size: (1.8 + Math.random() * 2.6) * (0.7 + 0.3 * strength),
+		});
+	}
+
+	// ─── Click effect ────────────────────────────────────────────────────
+
+	function fireClick(cx: number, cy: number) {
+		const sp    = scrollProgress;
+		const neonW = Math.max(0, 1 - Math.max(0, sp - 0.28) / 0.28);
+		const dustW = Math.max(0, Math.min(1, (sp - 0.28) / 0.28));
+
+		if (neonW > 0.04) {
+			const count = Math.round(8 + 6 * neonW);
+			for (let i = 0; i < count; i++) {
+				const ang = (i / count) * Math.PI * 2 + (Math.random() - 0.5) * 0.3;
+				beams.push({
+					x: cx, y: cy,
+					dx: Math.cos(ang), dy: Math.sin(ang),
+					speed:  (280 + Math.random() * 260) * (0.7 + 0.4 * neonW),
+					length: (55  + Math.random() * 100) * (0.7 + 0.5 * neonW),
+					life: 0, maxLife: 0.38 + Math.random() * 0.28,
+				});
+			}
+			flashes.push({ x: cx, y: cy, life: 0, maxLife: 0.30, radius: 85 + 55 * neonW });
+		}
+
+		if (dustW > 0.04) {
+			const count = Math.round(16 + 16 * dustW);
+			for (let i = 0; i < count; i++) {
+				spawnPuff(false, cx, cy, true);
+			}
+		}
+	}
+
+	window.addEventListener('click', (e) => {
+		let x = (e as MouseEvent).clientX;
+		let y = (e as MouseEvent).clientY;
+		if (((e as MouseEvent).detail === 0 || (x === 0 && y === 0)) && e.target instanceof Element) {
+			const r = (e.target as Element).getBoundingClientRect();
+			x = r.left + r.width / 2;
+			y = r.top  + r.height / 2;
+		}
+		fireClick(x, y);
+	}, { passive: true });
+
+	// ─── Ambient random dust bursts (lower page) ────────────────────────
+
+	let nextAmbientBurstAt = performance.now() + 1200 + Math.random() * 2000;
+	let nextMouseDustAt    = performance.now() + 2000 + Math.random() * 3000;
+
+	// ─── Shooting stars ──────────────────────────────────────────────────
+
+	let nextStarAt = performance.now() + 2500 + Math.random() * 3500;
+
+	function spawnStar() {
+		if (window.scrollY > h * 0.5) return;
+		stars.push({
+			x: w * (0.18 + Math.random() * 0.64) - 30,
+			y: h * (0.05 + Math.random() * 0.30),
+			vx: Math.cos(-0.05 + Math.random() * 0.35) * (700 + Math.random() * 600),
+			vy: Math.sin(-0.05 + Math.random() * 0.35) * (700 + Math.random() * 600),
+			length: 18 + Math.random() * 28,
+			life: 0, maxLife: 0.40 + Math.random() * 0.25,
+		});
+	}
+
+	// ─── Main loop ───────────────────────────────────────────────────────
+
+	let lastT   = performance.now();
+	let running = true;
+
+	document.addEventListener('visibilitychange', () => {
+		running = !document.hidden;
+		if (running) { lastT = performance.now(); requestAnimationFrame(loop); }
+	});
+
+	const windStrengthBase = 6;
+
+	function loop(now: number) {
+		if (!running) return;
+		const dt = Math.min(0.05, (now - lastT) / 1000);
+		lastT = now;
+		ctx!.clearRect(0, 0, w, h);
+
+		// ── 1. AMBIENT SMOKE PUFFS ─────────────────────────────────────
+		ctx!.globalCompositeOperation = 'source-over';
+		const targetPuffs = Math.floor(42 + 230 * scrollProgress);
+		while (puffs.length < targetPuffs) spawnPuff(false);
+
+		for (let i = puffs.length - 1; i >= 0; i--) {
+			const p = puffs[i];
+			p.life += dt;
+
+			// Upward buoyancy decelerates over time (smoke cools)
+			p.vy *= 1 - 0.30 * dt;
+			// Horizontal oscillation grows with age → smoke spreading
+			const spread = windStrengthBase + 22 * scrollProgress;
+			p.vx += Math.sin(now * 0.0005 + p.windPhase + p.y * 0.004) * spread * dt;
+			p.vx *= 1 - 0.28 * dt;
+			p.x  += p.vx * dt;
+			p.y  += p.vy * dt;
+
+			const tLife = p.life / p.maxLife;
+			if (tLife >= 1 || p.y < -220 || p.x < -250 || p.x > w + 250) {
+				puffs.splice(i, 1);
+				continue;
+			}
+
+			// Alpha curve: fast rise (0→0.3 of life), long slow fade
+			const fade = tLife < 0.28
+				? tLife / 0.28
+				: Math.pow(1 - (tLife - 0.28) / 0.72, 0.75);
+			const densityBoost = 0.50 + 0.70 * scrollProgress;
+			const a = p.alpha * fade * densityBoost;
+
+			// Puff grows as it rises (smoke expanding)
+			const currentScale = p.scale + p.growthRate * tLife;
+
+			// Per-puff heat shimmer: wobble increases with age
+			const shimmerAmp = 5 * tLife;
+			const heatX = Math.sin(now * 0.00075 * p.turbFreq + p.turbPhase) * shimmerAmp;
+			const heatY = Math.cos(now * 0.00055 * p.turbFreq + p.turbPhase * 1.3) * shimmerAmp * 0.55;
+
+			const sprite   = p.warm ? emberSprites[p.spriteIdx] : sandSprites[p.spriteIdx];
+			const drawSize = sprite.size * 2 * currentScale;
+			ctx!.globalAlpha = a;
+			ctx!.drawImage(sprite.canvas,
+				p.x + heatX - drawSize / 2,
+				p.y + heatY - drawSize / 2,
+				drawSize, drawSize);
+		}
+		ctx!.globalAlpha = 1;
+
+		// ── AMBIENT RANDOM DUST BURSTS (lower page) ───────────────────
+		if (scrollProgress > 0.52 && now >= nextAmbientBurstAt) {
+			const bx = w * (0.06 + Math.random() * 0.88);
+			const by = h * (0.68 + Math.random() * 0.26);
+			const count = 1 + Math.floor(Math.random() * 3 * (0.5 + scrollProgress * 0.5));
+			for (let j = 0; j < count; j++) {
+				spawnPuff(false, bx + (Math.random() - 0.5) * 24, by, true);
+			}
+			nextAmbientBurstAt = now + 500 + Math.random() * 2500 * (1.2 - scrollProgress);
+		}
+
+		// ── MOUSE-POSITION DUST (lower page, low frequency) ────────────
+		if (scrollProgress > 0.45 && my > h * 0.42 && mx > 0 && now >= nextMouseDustAt) {
+			const count = Math.random() < 0.35 ? 2 : 1;
+			for (let j = 0; j < count; j++) {
+				spawnPuff(false, mx + (Math.random() - 0.5) * 30, my + (Math.random() - 0.5) * 18, true);
+			}
+			nextMouseDustAt = now + 1200 + Math.random() * 3800;
+		}
+
+		// ── 2. CURSOR NEON TRAIL ───────────────────────────────────────
+		ctx!.globalCompositeOperation = 'lighter';
+
+		for (let i = trail.length - 1; i >= 0; i--) {
+			const p = trail[i];
+			p.life += dt;
+			p.vx   *= 1 - 2.4 * dt;
+			p.vy   *= 1 - 2.4 * dt;
+			p.vy   -= 8 * dt; // rise
+			p.x    += p.vx * dt;
+			p.y    += p.vy * dt;
+			const tLife = p.life / p.maxLife;
+			if (tLife >= 1) { trail.splice(i, 1); continue; }
+
+			const a = Math.pow(1 - tLife, 1.6);
+			const r = p.size * (1 + tLife * 0.6);
+
+			ctx!.beginPath();
+			ctx!.fillStyle = `rgba(255, 230, 255, ${a * 0.90})`;
+			ctx!.arc(p.x, p.y, r * 0.5, 0, Math.PI * 2);
+			ctx!.fill();
+
+			const g = ctx!.createRadialGradient(p.x, p.y, 0, p.x, p.y, r * 4);
+			g.addColorStop(0,   `rgba(200,  90, 255, ${a * 0.55})`);
+			g.addColorStop(0.4, `rgba(160,  60, 230, ${a * 0.25})`);
+			g.addColorStop(1,   'rgba(120,  40, 200, 0)');
+			ctx!.fillStyle = g;
+			ctx!.beginPath();
+			ctx!.arc(p.x, p.y, r * 4, 0, Math.PI * 2);
+			ctx!.fill();
+		}
+
+		// cursor bloom
+		const bloom = neonStrength();
+		if (finePointer && bloom > 0.05 && now - lastMoveAt < 220) {
+			const g = ctx!.createRadialGradient(mx, my, 0, mx, my, 90);
+			g.addColorStop(0,   `rgba(230, 180, 255, ${0.30 * bloom})`);
+			g.addColorStop(0.3, `rgba(180,  80, 255, ${0.14 * bloom})`);
+			g.addColorStop(1,   'rgba(140,  50, 210, 0)');
+			ctx!.fillStyle = g;
+			ctx!.beginPath();
+			ctx!.arc(mx, my, 90, 0, Math.PI * 2);
+			ctx!.fill();
+		}
+
+		// ── 3. CLICK BEAMS ────────────────────────────────────────────
+		if (beams.length > MAX_BEAMS) beams.splice(0, beams.length - MAX_BEAMS);
+
+		for (let i = beams.length - 1; i >= 0; i--) {
+			const b = beams[i];
+			b.life += dt;
+			const tLife = b.life / b.maxLife;
+			if (tLife >= 1) { beams.splice(i, 1); continue; }
+
+			const ease   = 1 - Math.pow(1 - tLife, 2.4);
+			const dist   = b.speed * b.maxLife * ease;
+			const hx     = b.x + b.dx * dist;
+			const hy     = b.y + b.dy * dist;
+			const tx     = hx  - b.dx * b.length;
+			const ty     = hy  - b.dy * b.length;
+			const a      = Math.pow(1 - tLife, 1.4);
+
+			const g = ctx!.createLinearGradient(hx, hy, tx, ty);
+			g.addColorStop(0,    `rgba(255, 240, 255, ${a})`);
+			g.addColorStop(0.25, `rgba(220, 130, 255, ${a * 0.85})`);
+			g.addColorStop(1,    'rgba(140,  50, 210, 0)');
+			ctx!.strokeStyle = g;
+			ctx!.lineWidth   = 2.4;
+			ctx!.lineCap     = 'round';
+			ctx!.beginPath();
+			ctx!.moveTo(tx, ty);
+			ctx!.lineTo(hx, hy);
+			ctx!.stroke();
+
+			ctx!.fillStyle = `rgba(255, 240, 255, ${a * 0.90})`;
+			ctx!.beginPath();
+			ctx!.arc(hx, hy, 2 + 2 * (1 - tLife), 0, Math.PI * 2);
+			ctx!.fill();
+		}
+
+		// ── 4. CLICK FLASHES ──────────────────────────────────────────
+		for (let i = flashes.length - 1; i >= 0; i--) {
+			const f = flashes[i];
+			f.life += dt;
+			const tLife = f.life / f.maxLife;
+			if (tLife >= 1) { flashes.splice(i, 1); continue; }
+
+			const a = Math.pow(1 - tLife, 1.5);
+			const r = f.radius * (0.4 + 0.9 * tLife);
+			const g = ctx!.createRadialGradient(f.x, f.y, 0, f.x, f.y, r);
+			g.addColorStop(0,   `rgba(255, 240, 255, ${a * 0.70})`);
+			g.addColorStop(0.4, `rgba(210, 130, 255, ${a * 0.30})`);
+			g.addColorStop(1,   'rgba(140,  50, 210, 0)');
+			ctx!.fillStyle = g;
+			ctx!.beginPath();
+			ctx!.arc(f.x, f.y, r, 0, Math.PI * 2);
+			ctx!.fill();
+		}
+
+		// ── 5. SHOOTING STARS ─────────────────────────────────────────
+		if (now >= nextStarAt) {
+			spawnStar();
+			nextStarAt = now + 4500 + Math.random() * 6000;
+		}
+
+		for (let i = stars.length - 1; i >= 0; i--) {
+			const s = stars[i];
+			s.life += dt;
+			s.x    += s.vx * dt;
+			s.y    += s.vy * dt;
+			const tLife = s.life / s.maxLife;
+			if (tLife >= 1 || s.x - s.length > w || s.y > h * 0.5) {
+				stars.splice(i, 1); continue;
+			}
+			const a     = Math.sin(tLife * Math.PI);
+			const speed = Math.hypot(s.vx, s.vy);
+			const tx    = s.x - (s.vx / speed) * s.length;
+			const ty    = s.y - (s.vy / speed) * s.length;
+
+			const tail = ctx!.createLinearGradient(s.x, s.y, tx, ty);
+			tail.addColorStop(0,   `rgba(235, 245, 255, ${a})`);
+			tail.addColorStop(0.4, `rgba(180, 210, 255, ${a * 0.45})`);
+			tail.addColorStop(1,   'rgba(140, 180, 255, 0)');
+			ctx!.strokeStyle = tail;
+			ctx!.lineWidth   = 1.4;
+			ctx!.lineCap     = 'round';
+			ctx!.beginPath();
+			ctx!.moveTo(tx, ty);
+			ctx!.lineTo(s.x, s.y);
+			ctx!.stroke();
+
+			const head = ctx!.createRadialGradient(s.x, s.y, 0, s.x, s.y, 7);
+			head.addColorStop(0,   `rgba(255, 255, 255, ${a * 0.85})`);
+			head.addColorStop(0.5, `rgba(190, 215, 255, ${a * 0.40})`);
+			head.addColorStop(1,   'rgba(150, 190, 255, 0)');
+			ctx!.fillStyle = head;
+			ctx!.beginPath();
+			ctx!.arc(s.x, s.y, 7, 0, Math.PI * 2);
+			ctx!.fill();
+		}
+
+		ctx!.globalCompositeOperation = 'source-over';
+		requestAnimationFrame(loop);
+	}
+
+	requestAnimationFrame((t) => { lastT = t; loop(t); });
+
+	} // end ctx check
+	} // end canvas check
+	} // end !reduced check
+	} // end HMR guard
+</script>

@@ -1,158 +1,185 @@
 ---
-import { Image } from 'astro:assets';
-import { images } from '../assets/images';
+import { Image } from "astro:assets";
+import { images } from "../assets/images";
 ---
 
 <section class="inside" aria-label="Inside the barrio">
-  <div class="inside-wide-wrap">
-    <Image
-      src={images.y2024.src}
-      alt={images.y2024.alt}
-      width={1600}
-      class="inside-wide-photo"
-    />
-    <div class="inside-wide-overlay"></div>
-    <h2 class="inside-wide-heading">
-      hammocks,<br />heat,<br />&amp; a bit of<br />chaos
-    </h2>
-  </div>
+	<div class="inside-wide-wrap">
+		<Image src={images.y2024.src} alt={images.y2024.alt} width={1600} class="inside-wide-photo" />
+		<div class="inside-wide-overlay"></div>
+		<h2 class="inside-wide-heading">
+			hammocks,<br />heat,<br />&amp; a bit of<br />chaos
+		</h2>
+	</div>
 
-  <div class="inside-lower">
-    <figure class="inside-portrait-wrap">
-      <Image
-        src={images.nets.src}
-        alt={images.nets.alt}
-        width={700}
-        class="inside-portrait"
-      />
-    </figure>
+	<div class="inside-lower">
+		<figure class="inside-portrait-wrap">
+			<Image src={images.nets.src} alt={images.nets.alt} width={700} class="inside-portrait" />
+		</figure>
 
-    <div class="inside-offerings">
-      <p>
-        The living room is always open. Find a net, drop your bag, meet someone
-        strange and wonderful. Wonderlings work hard on build and strike — and
-        in between, this is home.
-      </p>
-      <ul class="offerings">
-        <li>hammocks &amp; lounge nets</li>
-        <li>panoramic rooftop terrace</li>
-        <li>vegetarian kitchen (mostly)</li>
-        <li>workshops on the wonders of the world</li>
-        <li>a whimsical ceremonial chapel</li>
-        <li>queer-friendly &nbsp;·&nbsp; sober spaces available</li>
-      </ul>
-    </div>
-  </div>
+		<div class="inside-offerings">
+			<p>
+				The living room is always open. Wander in, find your spot, drop your stuff, meet someone strange and wonderful.
+			</p>
+			<ul class="offerings">
+				<li>Hammocks</li>
+				<li>Lounge nets</li>
+				<li>Cold beer on tap</li>
+				<li>The largest shade on the playa</li>
+				<li>The tallest balcony on the playa</li>
+				<li>Delicious vegetarian kitchen with hidden bacon reserves</li>
+				<li>Occasional workshops on the wonders of the world</li>
+				<li>A whimsical ceremonial chapel</li>
+				<li>Underground bunker so secret we're still looking for it</li>
+			</ul>
+		</div>
+	</div>
 </section>
 
 <style>
-  .inside {
-    background: oklch(0.10 0.018 15);
-  }
+	.inside {
+		background: oklch(0.1 0.018 15);
+	}
 
-  /* ── Wide photo with heading overlay ── */
+	/* ── Wide photo with heading overlay ── */
 
-  .inside-wide-wrap {
-    position: relative;
-    overflow: hidden;
-  }
+	.inside-wide-wrap {
+		position: relative;
+		overflow: hidden;
+	}
 
-  .inside-wide-photo {
-    width: 100%;
-    height: clamp(380px, 65vh, 740px);
-    object-fit: cover;
-    object-position: center 40%;
-    display: block;
-  }
+	.inside-wide-photo {
+		width: 100%;
+		height: clamp(380px, 65vh, 740px);
+		object-fit: cover;
+		object-position: center 40%;
+		display: block;
+	}
 
-  .inside-wide-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to bottom,
-      oklch(0.10 0.018 15 / 0.15) 0%,
-      oklch(0.10 0.018 15 / 0.70) 65%,
-      oklch(0.10 0.018 15)        100%
-    );
-  }
+	.inside-wide-overlay {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			to bottom,
+			oklch(0.1 0.018 15) 0%,
+			oklch(0.1 0.018 15 / 0.15) 12%,
+			oklch(0.1 0.018 15 / 0.7) 65%,
+			oklch(0.1 0.018 15) 100%
+		);
+	}
 
-  .inside-wide-heading {
-    position: absolute;
-    bottom: clamp(1.5rem, 4vw, 3rem);
-    left: clamp(1.5rem, 6vw, 5rem);
-    font-family: 'Bungee', sans-serif;
-    font-size: clamp(2.5rem, 8vw, 7rem);
-    color: oklch(0.97 0.008 80);
-    line-height: 0.96;
-    margin: 0;
-    z-index: 10;
-    letter-spacing: -0.02em;
-  }
+	.inside-wide-heading {
+		position: absolute;
+		bottom: clamp(1.5rem, 4vw, 3rem);
+		left: clamp(1.5rem, 6vw, 5rem);
+		font-family: "Bungee", sans-serif;
+		font-size: clamp(2.5rem, 8vw, 7rem);
+		color: oklch(0.97 0.008 80);
+		line-height: 0.96;
+		margin: 0;
+		z-index: 10;
+		letter-spacing: -0.02em;
+	}
 
-  /* ── Lower: portrait + offerings ── */
+	/* ── Lower: portrait + offerings ── */
 
-  .inside-lower {
-    max-width: 1360px;
-    margin: 0 auto;
-    padding: clamp(3rem, 6vw, 6rem) clamp(1.5rem, 6vw, 5rem);
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: clamp(2.5rem, 5vw, 5rem);
-  }
+	.inside-lower {
+		max-width: 1360px;
+		margin: 0 auto;
+		padding: clamp(3rem, 6vw, 6rem) clamp(1.5rem, 6vw, 5rem);
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: clamp(2.5rem, 5vw, 5rem);
+	}
 
-  @media (min-width: 860px) {
-    .inside-lower {
-      grid-template-columns: 2fr 3fr;
-      align-items: start;
-    }
-  }
+	@media (min-width: 860px) {
+		.inside-lower {
+			grid-template-columns: 2fr 3fr;
+			align-items: start;
+		}
+	}
 
-  .inside-portrait-wrap {
-    margin: 0;
-    overflow: hidden;
-  }
+	.inside-portrait-wrap {
+		margin: 0;
+		overflow: hidden;
+		position: relative;
+	}
 
-  .inside-portrait {
-    width: 100%;
-    height: clamp(280px, 55vw, 580px);
-    max-height: 580px;
-    object-fit: cover;
-    object-position: center 30%;
-    display: block;
-  }
+	.inside-portrait-wrap::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		background:
+			linear-gradient(to right, oklch(0.1 0.018 15) 0%, transparent 20%),
+			linear-gradient(to left, oklch(0.1 0.018 15) 0%, transparent 20%),
+			linear-gradient(to bottom, oklch(0.1 0.018 15) 0%, transparent 18%),
+			linear-gradient(to bottom, transparent 60%, oklch(0.1 0.018 15) 100%);
+	}
 
-  .inside-offerings p {
-    font-family: 'Jost', sans-serif;
-    font-size: clamp(0.95rem, 1.5vw, 1.05rem);
-    line-height: 1.8;
-    color: oklch(0.72 0.01 80);
-    margin: 0 0 2rem;
-    max-width: 50ch;
-  }
+	.inside-portrait {
+		width: 100%;
+		height: clamp(280px, 55vw, 580px);
+		max-height: 580px;
+		object-fit: cover;
+		object-position: center 30%;
+		display: block;
+	}
 
-  .offerings {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
+	.inside-offerings p {
+		font-family: "Jost", sans-serif;
+		font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+		line-height: 1.8;
+		color: oklch(0.72 0.01 80);
+		margin: 0 0 2rem;
+		max-width: 54ch;
+	}
 
-  .offerings li {
-    font-family: 'Jost', sans-serif;
-    font-size: clamp(0.875rem, 1.4vw, 1rem);
-    line-height: 1.5;
-    color: oklch(0.78 0.012 80);
-    padding-left: 1.5rem;
-    position: relative;
-  }
+	.offerings {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
 
-  .offerings li::before {
-    content: '›';
-    position: absolute;
-    left: 0;
-    color: oklch(0.62 0.26 322);
-    font-weight: 400;
-  }
+	.offerings li {
+		font-family: "Jost", sans-serif;
+		font-size: clamp(0.875rem, 1.4vw, 1rem);
+		line-height: 1.5;
+		color: oklch(0.78 0.012 80);
+		padding-left: 1.75rem;
+		position: relative;
+		transition:
+			color 0.2s ease,
+			padding-left 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+	}
+
+	.offerings li:hover {
+		color: oklch(0.92 0.01 80);
+		padding-left: 2.1rem;
+	}
+
+	.offerings li::before {
+		content: "✦";
+		position: absolute;
+		left: 0;
+		font-size: 0.6em;
+		top: 0.25em;
+		color: oklch(0.82 0.16 135);
+		text-shadow:
+			0 0 6px oklch(0.82 0.16 135 / 0.8),
+			0 0 14px oklch(0.82 0.16 135 / 0.4);
+		transition:
+			transform 0.2s cubic-bezier(0.25, 1, 0.5, 1),
+			text-shadow 0.2s ease;
+	}
+
+	.offerings li:hover::before {
+		transform: rotate(45deg) scale(1.3);
+		text-shadow:
+			0 0 8px oklch(0.82 0.16 135 / 1),
+			0 0 20px oklch(0.82 0.16 135 / 0.6);
+	}
 </style>
