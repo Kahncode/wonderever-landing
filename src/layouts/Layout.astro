@@ -11,6 +11,9 @@ const {
   title = 'Wonderever — a barrio at Elsewhere',
   description = 'The best kept secret on the playa. A barrio at Elsewhere, Monegros Desert, Spain, July. Since 2013.',
 } = Astro.props;
+
+const siteUrl = 'https://wonderever.org';
+const ogImage = `${siteUrl}/og-image.jpg`;
 ---
 
 <!doctype html>
@@ -24,11 +27,12 @@ const {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/og-image.jpg" />
+    <meta property="og:url" content={siteUrl} />
+    <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="/og-image.jpg" />
+    <meta name="twitter:image" content={ogImage} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
