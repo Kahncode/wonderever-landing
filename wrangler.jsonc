@@ -1,6 +1,6 @@
 {
 	"compatibility_date": "2026-04-22",
-	"name": "wonderever-landing",
+	"name": "wonderever",
 	// Static site only - serve dist/ folder as static assets from Cloudflare Pages.
 	// No Cloudflare adapter needed: no SSR, no API routes, no KV/D1/Worker bindings.
 	// Images pre-optimized at build time (output: 'static'), no dynamic endpoint required.
