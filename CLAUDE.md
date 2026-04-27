@@ -20,22 +20,6 @@ npm run preview   # preview built output locally
 | Deploy      | Cloudflare Pages              |
 | Language    | TypeScript (strict)           |
 
-### For Claude: Always Proactive
-
-**When writing UI copy, CTAs, messaging, or onboarding:**
-- Read `docs/shared/brand.md` FIRST — non-negotiable before proposing any copy
-- Verify vocabulary and voice match brand.md examples
-- Check color palette in brand.md — use only approved brand colors
-- Never ship copy that hasn't been validated against brand guidelines
-
-**When planning features or product decisions:**
-- Check `docs/shared/product.md` for existing flow definitions and constraints
-- Use issue templates and conventions from `docs/shared/planning.md`
-
-**When updating shared docs:**
-- This folder is synchronized across all repos via git subtree
-- Before pushing changes upstream, verify they apply to all consuming projects
-
 ## Architecture
 
 Islands Architecture: Astro renders all structure as static HTML. Interactive components are React `.tsx` files hydrated via `client:load` / `client:visible` directives. Default to static Astro components; reach for React only when state or interactivity is needed.
